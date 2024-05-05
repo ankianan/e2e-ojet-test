@@ -35,7 +35,7 @@ function getBuidler() {
 
     //@ts-ignore
     const chromOptions = new chrome.Options().enableBidi();
-    //chromOptions.addArguments('--headless=new');
+    chromOptions.addArguments('--headless=new');
     
     //@ts-ignore
     const ffOptions = new firefox.Options().enableBidi();
