@@ -24,6 +24,7 @@ jobs:
         run: |
           npm run test:e2e
       - name: List files in the repository
+        if: ${{ always() }}
         run: |
           ls ${{ github.workspace }}/e2e/reports/**/*
       - run: echo "🍏 This job's status is ${{ job.status }}."
