@@ -39,7 +39,7 @@ function getBuidler() {
     
     //@ts-ignore
     const ffOptions = new firefox.Options().enableBidi();
-    //ffOptions.addArguments('--headless');
+    ffOptions.addArguments('--headless');
 
     let builder = new Builder()
         .setChromeOptions(chromOptions)
