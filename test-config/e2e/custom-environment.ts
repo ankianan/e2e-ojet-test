@@ -1,25 +1,33 @@
-import { DriverContext, createDriverContext } from "./driverContext/DriverContext";
+import { DriverContext, createDriverContext } from "./cda-testing-framework/dist/index";
 import {WebDriver} from 'selenium-webdriver';
 // my-custom-environment
-import NodeEnvironment = require('jest-environment-node');
+const NodeEnvironment = require('jest-environment-node').TestEnvironment;
+import {DriverManager} from '@oracle/oraclejet-webdriver';
 
-export default class CustomEnvironment extends NodeEnvironment.TestEnvironment {
+export default class CustomEnvironment extends NodeEnvironment {
   testPath: any;
-  private _driverContext: DriverContext | undefined;
-  //@ts-ignore
+  _driverContext?: DriverContext;
+  counter: number;
   constructor(config, context) {
-    super(config, context);
+    super(config);
     this.testPath = context.testPath;
   }
 
   async setup() {
     await super.setup();
-    this.global.setDriver = async (driver:WebDriver)=>{
-      const driverContext =  await createDriverContext(driver);
-      this.setDriverContext(driverContext);
-    }
-    this.global.getDriver = ()=>{
-      return this.getDriverContext()?.driver;
+    this.counter = 1;
+    this.global.setDriver = async (driver)=>{   
+        const driverContext =  await createDriverContext(driver);
+        this.setDriverContext(driverContext);
+        await this.getDriverContext()?.beforeTest(this.testPath, this.counter++);
+        
+        this.global.releaseDriver = async ()=>{
+            
+            await driverContext.releaseContext(true);
+            //Allow driver to quit
+            DriverManager.releaseDriver(driver);
+            await new Promise(r=>setTimeout(r,1000));
+        }
     }
   }
 
@@ -27,19 +35,11 @@ export default class CustomEnvironment extends NodeEnvironment.TestEnvironment {
     this._driverContext = driverContext;
   }
 
-  async teardown() {
-    await super.teardown();
-  }
-
-  getVmContext() {
-    return super.getVmContext();
-  }
-
   async handleTestEvent(event, state) {
     if(this.getDriverContext()){
       
       if(event.name === 'test_fn_start') {
-        await this.getDriverContext()?.beforeTest(event.test.parent.name, event.test.name);
+        //await this.getDriverContext().beforeTest(event.test.parent.name, event.test.name);
       }
   
       if(event.name === 'test_done') {  
@@ -47,11 +47,11 @@ export default class CustomEnvironment extends NodeEnvironment.TestEnvironment {
       }
   
       if(event.name === 'test_fn_success'){
-        await this.getDriverContext()?.releaseContext(true);
+        //await this.getDriverContext().releaseContext(true);
       }
       
       if(event.name === 'test_fn_failure'){
-        await this.getDriverContext()?.releaseContext(false);
+        //await this.getDriverContext().releaseContext(false);
       }
 
     }

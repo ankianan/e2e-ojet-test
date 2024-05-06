@@ -3,5 +3,5 @@
 /web
 .DS_Store
 package-lock.json
-e2e/reports/
+e2e/__tests__/__reports__/
 web/

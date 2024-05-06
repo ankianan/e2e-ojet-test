@@ -28,7 +28,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: e2e-reports
-          path: e2e/reports
+          path: e2e/__tests__/__reports__
       - name: List files in e2e-reports
         if: ${{ always() }}
         run: |

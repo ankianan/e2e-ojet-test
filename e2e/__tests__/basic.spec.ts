@@ -1,10 +1,20 @@
-import ojwd from '@oracle/oraclejet-webdriver';
+import ojwd, {DriverManager} from '@oracle/oraclejet-webdriver';
 import {ojInputText, ojCollapsible} from '@oracle/oraclejet-webdriver/elements';
 import {By, WebDriver, until} from 'selenium-webdriver';
 
 describe('Basic test', ()=>{
+    let driver: WebDriver;
+
+    beforeEach(async ()=>{
+        driver= await DriverManager.getDriver('chromeconfig');
+        await global.setDriver(driver);
+    })
+
+    afterEach(async ()=>{
+        await global.releaseDriver()
+    })
+
     test('Test value changing to capital', async ()=>{
-        let driver:WebDriver = global.getDriver();
         await ojwd.get(driver, 'http://localhost:8000/')
         let node_collapsible = await ojCollapsible(driver, By.css('oj-collapsible'));
         await node_collapsible.doExpand();

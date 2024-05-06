@@ -3,12 +3,12 @@
 	"version": "1.0.0",
 	"description": "An Oracle JavaScript Extension Toolkit(JET) web app",
 	"dependencies": {
-		"@oracle/oraclejet": "~16.0.0",
-		"@oracle/oraclejet-core-pack": "~16.0.0"
+		"@oracle/oraclejet": "16.0.0",
+		"@oracle/oraclejet-core-pack": "16.0.0"
 	},
 	"devDependencies": {
-		"@oracle/ojet-cli": "~16.0.0",
-		"@oracle/oraclejet-jest-preset": "16.0.6",
+		"@oracle/ojet-cli": "16.0.0",
+		"@oracle/oraclejet-jest-preset": "16.0.0",
 		"@prefresh/babel-plugin": "0.5.1",
 		"@prefresh/webpack": "4.0.0",
 		"@testing-library/preact": "3.2.3",
@@ -49,6 +49,6 @@
 		"test": "jest -c test-config/jest.config.js",
 		"test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
 		"test:coverage": "npm run test -- --coverage",
-		"test:e2e": "rm -rf e2e/reports && mkdir e2e/reports && npm run test -- --runInBand e2e/**"
+		"test:e2e": "rm -rf e2e/__tests__/__reports__ && npm run test -- --runInBand e2e/**"
 	}
 }
