@@ -29,8 +29,4 @@ jobs:
         with:
           name: e2e-reports
           path: e2e/__tests__/__reports__
-      - name: List files in e2e-reports
-        if: ${{ always() }}
-        run: |
-          ls ${{ github.workspace }}/e2e/reports/**/*
       - run: echo "🍏 This job's status is ${{ job.status }}."
