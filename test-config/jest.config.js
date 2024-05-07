@@ -18,7 +18,7 @@ const jestE2eConfig = {
   testEnvironment: '<rootDir>/test-config/e2e/custom-environment.ts',
   testEnvironmentOptions: {
     browser: Browser.CHROME,
-    headless: false
+    headless: true
   }
 };
 
