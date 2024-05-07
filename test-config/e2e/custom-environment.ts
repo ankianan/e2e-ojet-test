@@ -3,6 +3,8 @@ import {WebDriver} from 'selenium-webdriver';
 // my-custom-environment
 const NodeEnvironment = require('jest-environment-node').TestEnvironment;
 import {DriverManager} from '@oracle/oraclejet-webdriver';
+import path from "path";
+import { rm } from "fs/promises";
 
 export default class CustomEnvironment extends NodeEnvironment {
   testPath: any;
@@ -11,6 +13,7 @@ export default class CustomEnvironment extends NodeEnvironment {
   constructor(config, context) {
     super(config);
     this.testPath = context.testPath;
+    this.global.testEnvironmentOptions = config.projectConfig.testEnvironmentOptions;
   }
 
   async setup() {
@@ -42,12 +45,18 @@ export default class CustomEnvironment extends NodeEnvironment {
         //await this.getDriverContext().beforeTest(event.test.parent.name, event.test.name);
       }
   
-      if(event.name === 'test_done') {  
-        //this.setDriverContext(null);
+      if(event.name === 'test_done') {
+        //By this time remote must be ready
+        try {
+          this.removeReportsForPassedTests(event);
+        } catch (error) {
+          console.log(error);
+        }
       }
   
       if(event.name === 'test_fn_success'){
         //await this.getDriverContext().releaseContext(true);
+        
       }
       
       if(event.name === 'test_fn_failure'){
@@ -56,6 +65,22 @@ export default class CustomEnvironment extends NodeEnvironment {
 
     }
    
+  }
+
+  private async removeReportsForPassedTests(event: any) {
+    if (event.test.errors.length === 0) {
+      const testIndex = event.test.parent.children.indexOf(event.test);
+      const testDir = path.dirname(this.testPath);
+      const basename = path.basename(this.testPath, '.ts');
+      const harReportPath = `${testDir}/__reports__/${basename}/test${testIndex + 1}.har`;
+      await rm(harReportPath);
+      const logReportPath = `${testDir}/__reports__/${basename}/test${testIndex + 1}.log`;
+      await rm(logReportPath);
+      const screenshotsReportPath = `${testDir}/__reports__/${basename}/screenshots/test${testIndex + 1}`;
+      await rm(screenshotsReportPath, {
+        recursive: true
+      });
+    }
   }
 
   private getDriverContext() {

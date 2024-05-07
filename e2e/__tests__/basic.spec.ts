@@ -6,7 +6,7 @@ describe('Basic test', ()=>{
     let driver: WebDriver;
 
     beforeEach(async ()=>{
-        driver= await DriverManager.getDriver('chromeconfig');
+        driver= await DriverManager.getDriver();
         await global.setDriver(driver);
     })
 

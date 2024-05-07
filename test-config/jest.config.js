@@ -1,3 +1,4 @@
+const {Browser} = require('selenium-webdriver');
 /**
   Copyright (c) 2015, 2024, Oracle and/or its affiliates.
   Licensed under The Universal Permissive License (UPL), Version 1.0
@@ -14,10 +15,11 @@ const jestE2eConfig = {
   setupFiles: [
     "<rootDir>/test-config/e2e/testSetup.ts"
   ],
-  setupFilesAfterEnv: [
-    "<rootDir>/test-config/e2e/testSetupAfterEnv.ts"
-  ],
-  testEnvironment: '<rootDir>/test-config/e2e/custom-environment.ts'
+  testEnvironment: '<rootDir>/test-config/e2e/custom-environment.ts',
+  testEnvironmentOptions: {
+    browser: Browser.CHROME,
+    headless: false
+  }
 };
 
 /** @type {import('@jest/types').Config.InitialOptions} */

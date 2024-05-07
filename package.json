@@ -14,6 +14,7 @@
 		"@testing-library/preact": "3.2.3",
 		"@types/jest": "29.5.3",
 		"@types/node": "18.16.3",
+		"bidi-har-export": "git+https://github.com/firefox-devtools/bidi-har-export.git",
 		"clean-webpack-plugin": "4.0.0",
 		"compression-webpack-plugin": "11.1.0",
 		"copy-webpack-plugin": "12.0.2",
@@ -38,8 +39,7 @@
 		"webpack": "5.76.0",
 		"webpack-dev-server": "5.0.4",
 		"webpack-merge": "5.10.0",
-		"yargs-parser": "13.1.2",
-		"bidi-har-export": "git+https://github.com/firefox-devtools/bidi-har-export.git"
+		"yargs-parser": "13.1.2"
 	},
 	"engines": {
 		"node": ">=12.21.0"
@@ -49,6 +49,6 @@
 		"test": "jest -c test-config/jest.config.js",
 		"test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
 		"test:coverage": "npm run test -- --coverage",
-		"test:e2e": "rm -rf e2e/__tests__/__reports__ && npm run test -- --runInBand e2e/**"
+		"test:e2e": "rm -rf e2e/__tests__/__reports__/** && npm run test -- --runInBand e2e/**"
 	}
 }
